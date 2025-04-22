@@ -1,3 +1,0 @@
-# Somepage page
-
-some content

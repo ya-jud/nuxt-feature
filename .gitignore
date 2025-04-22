@@ -1,6 +1,6 @@
 # Nuxt dev/build outputs
-nuxt-feature/.output
-nuxt-feature/.data
+.output
+.data
 .nuxt
 .nitro
 .cache
