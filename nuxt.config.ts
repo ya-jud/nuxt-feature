@@ -5,7 +5,6 @@ export default defineNuxtConfig({
   ssr: true,
 
   modules: [
-    '@nuxt/content',
     '@nuxt/eslint',
     '@nuxt/fonts',
     '@nuxt/icon',
