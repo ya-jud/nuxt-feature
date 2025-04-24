@@ -1,0 +1,68 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+/* ✅ Базовые цвета (светлая тема по умолчанию) */
+:root {
+    --neutral-100: #F8F9FA;
+    --neutral-200: #EDEEF0;
+    --neutral-700: #5C5F66;
+    --neutral-900: #2E2E33;
+
+    --primary-400: #E3C85A;
+    --primary-500: #D6B44C;
+
+    --accent-400: #A084CA;
+    --accent-600: #8693A5;
+}
+
+/* ✅ Тёмная тема */
+[data-theme="dark"] {
+    --neutral-100: #1A1C20;
+    --neutral-200: #999DA6;
+    --neutral-700: #3A3D44;
+    --neutral-800: #2B2E35;
+    --neutral-900: #F8F9FA;
+
+    --primary-400: #F0D770;
+    --primary-500: #D6B44C;
+
+    --accent-400: #BFA9E4;
+    --accent-600: #9A97D4;
+}
+
+/* ✅ Прокси для статики (используется для сборки Tailwind токенов) */
+@theme static {
+    --color-neutral-100: #F8F9FA;
+    --color-neutral-200: #EDEEF0;
+    --color-neutral-700: #5C5F66;
+    --color-neutral-900: #2E2E33;
+
+    --color-primary-400: #E3C85A;
+    --color-primary-500: #D6B44C;
+
+    --color-accent-400: #A084CA;
+    --color-accent-600: #8693A5;
+
+    --ui-text: var(--color-neutral-900);
+    --ui-bg: var(--color-neutral-100);
+    --ui-text-highlighted: var(--color-primary-500);
+}
+
+/* ✅ Динамические значения, работающие при переключении темы */
+@theme selector {
+    --color-neutral-100: var(--neutral-100);
+    --color-neutral-200: var(--neutral-200);
+    --color-neutral-700: var(--neutral-700);
+    --color-neutral-900: var(--neutral-900);
+
+    --color-primary-400: var(--primary-400);
+    --color-primary-500: var(--primary-500);
+
+    --color-accent-400: var(--accent-400);
+    --color-accent-600: var(--accent-600);
+
+    --ui-text: var(--color-neutral-900);
+    --ui-bg: var(--color-neutral-100);
+    --ui-text-highlighted: var(--color-primary-500);
+}
+

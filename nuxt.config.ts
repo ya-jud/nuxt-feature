@@ -1,8 +1,6 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  ssr: true,
 
   modules: [
     '@nuxt/eslint',
@@ -12,5 +10,19 @@ export default defineNuxtConfig({
     '@nuxt/scripts',
     '@nuxt/test-utils',
     '@nuxt/ui',
-  ]
+  ],
+
+  css: ['~/assets/styles/main.css'],
+  ui: {
+    theme: {
+      colors: ['primary', 'secondary', 'error']
+    }
+  },
+  app: {
+    head: {
+      script: [
+        { src: '/init-theme.js', tagPosition: 'head' }
+      ]
+    }
+  }
 })
