@@ -3,6 +3,8 @@ import { ref, onMounted } from 'vue';
 
 const themeName = ref<'light' | 'dark'>('light');
 
+console.log('init', 'is github alive?')
+
 onMounted(() => {
   const saved = localStorage.getItem('theme') as 'light' | 'dark' | null;
   themeName.value = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
