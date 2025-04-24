@@ -24,5 +24,12 @@ export default defineNuxtConfig({
         { src: '/init-theme.js', tagPosition: 'head' }
       ]
     }
+  },
+  imports: {
+    dirs: [
+      'composables',
+      'composables/*/index.{ts,js,mjs,mts}',
+      'composables/**'
+    ]
   }
 })
