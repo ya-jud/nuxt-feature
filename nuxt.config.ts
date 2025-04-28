@@ -39,5 +39,8 @@ export default defineNuxtConfig({
       'composables/*/index.{ts,js,mjs,mts}',
       'composables/**'
     ]
+  },
+  nitro: {
+    preset: 'netlify'
   }
 })
