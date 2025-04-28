@@ -13,6 +13,14 @@ export default defineNuxtConfig({
   ],
 
   css: ['~/assets/styles/main.css'],
+  vite: {
+    build: {
+      sourcemap: true // или false на продакшн
+    },
+    css: {
+      devSourcemap: false // Важно: отключает sourcemaps для CSS отдельно
+    }
+  },
   ui: {
     theme: {
       colors: ['primary', 'secondary', 'error']
