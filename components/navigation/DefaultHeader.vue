@@ -1,142 +1,160 @@
 <script setup lang="ts">
+import type { NavigationMenuItem } from '@nuxt/ui';
+import { onMounted, ref } from 'vue';
 import ThemeSwitcher from "~/components/shared/ThemeSwitcher.vue";
-import { useScreen } from '~/composables/useScreen'
+import { useScreen } from '~/composables/useScreen';
 
 const { isMobile } = useScreen()
 
-const props = defineProps({
-  data: {
-    default: () => [],
-    type: Array,
-  }
+const props = withDefaults(defineProps<{
+  data?: NavigationMenuItem[]
+}>(), {
+  data: () => []
+});
+
+const isShowMenu = ref<boolean>(false)
+
+// Для скелетона
+const isHeaderReady = ref(false)
+onMounted(() => {
+  isHeaderReady.value = true
 })
 
-const isShowMenu = ref<boolean>(true)
-
 // Плавная анимация: height > opacity
-function menuBeforeEnter(el: HTMLElement) {
-  el.style.height = '0';
-  el.style.opacity = '0';
-  el.style.overflow = 'hidden';
+function menuBeforeEnter(el: Element) {
+  (el as HTMLElement).style.height = '0';
+  (el as HTMLElement).style.opacity = '0';
+  (el as HTMLElement).style.overflow = 'hidden';
 }
-function menuEnter(el: HTMLElement, done: () => void) {
-  const height = el.scrollHeight;
-  el.style.transition = 'height 250ms cubic-bezier(.25,.8,.25,1)';
-  el.style.height = height + 'px';
+function menuEnter(el: Element, done: () => void) {
+  const height = (el as HTMLElement).scrollHeight;
+  (el as HTMLElement).style.transition = 'height 250ms cubic-bezier(.25,.8,.25,1)';
+  (el as HTMLElement).style.height = height + 'px';
   // ждем окончания height, потом плавно показываем opacity
   setTimeout(() => {
-    el.style.transition = 'opacity 200ms';
-    el.style.opacity = '1';
+    (el as HTMLElement).style.transition = 'opacity 200ms';
+    (el as HTMLElement).style.opacity = '1';
     setTimeout(done, 200);
   }, 250);
 }
-function menuAfterEnter(el: HTMLElement) {
-  el.style.height = '';
-  el.style.opacity = '';
-  el.style.transition = '';
-  el.style.overflow = '';
+function menuAfterEnter(el: Element) {
+  (el as HTMLElement).style.height = '';
+  (el as HTMLElement).style.opacity = '';
+  (el as HTMLElement).style.transition = '';
+  (el as HTMLElement).style.overflow = '';
 }
-function menuBeforeLeave(el: HTMLElement) {
-  el.style.height = el.scrollHeight + 'px';
-  el.style.opacity = '1';
-  el.style.overflow = 'hidden';
-  el.style.transition = '';
+function menuBeforeLeave(el: Element) {
+  (el as HTMLElement).style.height = (el as HTMLElement).scrollHeight + 'px';
+  (el as HTMLElement).style.opacity = '1';
+  (el as HTMLElement).style.overflow = 'hidden';
+  (el as HTMLElement).style.transition = '';
 }
-function menuLeave(el: HTMLElement, done: () => void) {
-  el.style.transition = 'opacity 150ms';
-  el.style.opacity = '0';
+function menuLeave(el: Element, done: () => void) {
+  (el as HTMLElement).style.transition = 'opacity 150ms';
+  (el as HTMLElement).style.opacity = '0';
   setTimeout(() => {
-    el.style.transition = 'height 200ms cubic-bezier(.25,.8,.25,1)';
-    el.style.height = '0';
+    (el as HTMLElement).style.transition = 'height 200ms cubic-bezier(.25,.8,.25,1)';
+    (el as HTMLElement).style.height = '0';
     setTimeout(done, 200);
   }, 150);
 }
-function menuAfterLeave(el: HTMLElement) {
-  el.style.height = '';
-  el.style.opacity = '';
-  el.style.transition = '';
-  el.style.overflow = '';
+function menuAfterLeave(el: Element) {
+  (el as HTMLElement).style.height = '';
+  (el as HTMLElement).style.opacity = '';
+  (el as HTMLElement).style.transition = '';
+  (el as HTMLElement).style.overflow = '';
 }
 </script>
 
 <template>
-  <ClientOnly>
-    <header class="default-header">
-      <div
-        v-if="!isMobile"
-        class="default-header__container flex items-center pl-5 pr-5"
-      >
-        <ThemeSwitcher />
+  <div class="default-header">
+    <div v-if="!isHeaderReady">
+      <header class="default-header animate-pulse">
+        <div class="default-header__container flex items-center pl-5 pr-5 h-12">
+          <div class="rounded-full bg-gray-200 h-8 w-8 mr-4" />
+          <div class="flex-1 h-8 bg-gray-200 rounded mx-4" />
+          <div class="rounded-full bg-gray-200 h-8 w-8 ml-4" />
+        </div>
+      </header>
+    </div>
+    <ClientOnly>
+      <header v-if="isHeaderReady" class="default-header">
+        <div
+          v-if="!isMobile"
+          class="default-header__container flex items-center pl-5 pr-5"
+        >
+          <ThemeSwitcher />
 
-        <UNavigationMenu
-          class="default-header__navigation w-full justify-center"
-          orientation="horizontal"
-          :items="props.data"
-        />
-
-        <UAvatar
-            class="h-auto"
-            src="https://avatars.githubusercontent.com/u/101886905?v=4"
-        />
-      </div>
-
-      <div
-        v-else
-        class="default-header__container"
-      >
-        <div class="flex justify-between items-center p-2 h-20">
-          <UAvatar
-            class="h-auto w-15"
-            src="https://avatars.githubusercontent.com/u/101886905?v=4"
+          <UNavigationMenu
+            class="default-header__navigation w-full justify-center"
+            orientation="horizontal"
+            :items="props.data"
           />
 
-          <div class="flex items-center gap-2">
-            <ThemeSwitcher size="xl" />
-
-            <UButton
-                color="secondary"
-                variant="ghost"
-                @click="isShowMenu = !isShowMenu"
-            >
-              <template #leading>
-                <UIcon name="jam:align-justify" size="40" />
-              </template>
-            </UButton>
-          </div>
+          <UAvatar
+              class="h-auto"
+              src="https://avatars.githubusercontent.com/u/101886905?v=4"
+          />
         </div>
 
-        <transition
-          @before-enter="menuBeforeEnter"
-          @enter="menuEnter"
-          @after-enter="menuAfterEnter"
-          @before-leave="menuBeforeLeave"
-          @leave="menuLeave"
-          @after-leave="menuAfterLeave"
+        <div
+          v-else
+          class="default-header__container"
         >
-          <div v-show="isShowMenu">
-            <UNavigationMenu
-                class="default-header__navigation w-full justify-center"
-                orientation="vertical"
-                :items="props.data"
-                :ui="{
-              content: 'h-200'
-            }"
-            >
-              <template #item="{ item }">
-                <UButton
-                    variant="ghost"
-                    size="xl"
-                    color="neutral"
-                >
-                  {{ item.label }}
-                </UButton>
-              </template>
-            </UNavigationMenu>
+          <div class="flex justify-between items-center p-2 h-20">
+            <UAvatar
+              class="h-auto w-15"
+              src="https://avatars.githubusercontent.com/u/101886905?v=4"
+            />
+
+            <div class="flex items-center gap-2">
+              <ThemeSwitcher size="xl" />
+
+              <UButton
+                  color="secondary"
+                  variant="ghost"
+                  @click="isShowMenu = !isShowMenu"
+              >
+                <template #leading>
+                  <UIcon name="jam:align-justify" size="40" />
+                </template>
+              </UButton>
+            </div>
           </div>
-        </transition>
-      </div>
-    </header>
-  </ClientOnly>
+
+          <transition
+            @before-enter="menuBeforeEnter"
+            @enter="menuEnter"
+            @after-enter="menuAfterEnter"
+            @before-leave="menuBeforeLeave"
+            @leave="menuLeave"
+            @after-leave="menuAfterLeave"
+          >
+            <div v-show="isShowMenu">
+              <UNavigationMenu
+                  class="default-header__navigation w-full justify-center"
+                  orientation="vertical"
+                  :items="props.data"
+                  :ui="{
+                content: 'h-200'
+              }"
+              >
+                <template #item="{ item }">
+                  <UButton
+                      variant="ghost"
+                      size="xl"
+                      color="neutral"
+                  >
+                    {{ item.label }}
+                  </UButton>
+                </template>
+              </UNavigationMenu>
+            </div>
+          </transition>
+        </div>
+      </header>
+    </ClientOnly>
+  </div>
 </template>
 
 <style>
@@ -145,7 +163,6 @@ function menuAfterLeave(el: HTMLElement) {
   top: 20px;
 
   .default-header__container {
-    position: relative;
     width: calc(100% - 40px);
     margin: 20px;
     background-color: rgba(189, 189, 189, 0.1);
@@ -160,11 +177,10 @@ function menuAfterLeave(el: HTMLElement) {
   }
 
   @media screen and (max-width: 768px) {
-    position: fixed;
-    top: unset;
-    bottom: 20px;
-
     .default-header__container {
+      position: fixed;
+      top: unset;
+      bottom: 20px;
       width: calc(100vw - 40px);
     }
   }
