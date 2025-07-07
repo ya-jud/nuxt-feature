@@ -157,7 +157,7 @@ function menuAfterLeave(el: Element) {
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .default-header {
   position: sticky;
   top: 20px;

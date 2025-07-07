@@ -30,7 +30,7 @@ const baseNavigation = [
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .default {
   .default__grid {
     height: 2000px;
